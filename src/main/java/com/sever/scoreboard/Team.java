@@ -1,11 +1,13 @@
 package com.sever.scoreboard;
 
+import java.util.Objects;
+
 /**
  * Basic class for match participant.
  */
 public class Team {
 
-    private String name;
+    private final String name;
 
     /**
      * Create a new team with the given name.
@@ -24,5 +26,18 @@ public class Team {
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team = (Team) o;
+        return Objects.equals(name, team.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }

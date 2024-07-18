@@ -18,4 +18,18 @@ class TeamTest {
         assertThrows(IllegalArgumentException.class, () -> new Team(""));
         assertThrows(IllegalArgumentException.class, () -> new Team(" "));
     }
+
+    @Test
+    void twoEqualTeams_areEqual() {
+        Team team1 = new Team("CE");
+        Team team2 = new Team("CE");
+        assertEquals(true, team1.equals(team2));
+    }
+
+    @Test
+    void twoEqualTeams_haveEqualHashCode() {
+        Team team1 = new Team("CE");
+        Team team2 = new Team("CE");
+        assertEquals(team1.hashCode(), team2.hashCode());
+    }
 }
