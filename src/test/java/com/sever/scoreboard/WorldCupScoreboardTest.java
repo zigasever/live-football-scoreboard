@@ -78,7 +78,7 @@ public class WorldCupScoreboardTest {
         match4.setScore(6, 6);
         Thread.sleep(1);
         TeamSportMatch match5 = scoreboard.startMatch(5, new Team("Argentina"), new Team("Australia"));
-        match5.setScore(10, 2);
+        match5.setScore(3, 1);
 
         final Collection correctOrder = List.of(match4, match2, match1, match5, match3);
 

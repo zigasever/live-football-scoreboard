@@ -1,9 +1,11 @@
 package com.sever.scoreboard;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class WorldCupScoreBoard implements ScoreBoard {
+
+    private Set<FootballMatch> matches = new HashSet<>();
 
     public WorldCupScoreBoard() {
     }
@@ -17,8 +19,15 @@ public class WorldCupScoreBoard implements ScoreBoard {
      * @return the match that was started.
      */
     @Override
-    public TeamSportMatch startMatch(int id, Team homeTeam, Team awayTeam) {
-        return null;
+    public FootballMatch startMatch(int id, Team homeTeam, Team awayTeam) {
+        FootballMatch match = new FootballMatch(id, homeTeam, awayTeam);
+        if(matches.stream()
+                .flatMap(m -> Set.of(m.getAwayTeam(), m.getHomeTeam()).stream())
+                .anyMatch(t -> t.equals(match.getAwayTeam()) || t.equals(match.getHomeTeam()))){
+            throw new IllegalArgumentException("One of the teams is already participating in another match.");
+        }
+        matches.add(match);
+        return match;
     }
 
     /**
@@ -28,7 +37,7 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public void removeMatch(TeamSportMatch match) {
-
+        matches.remove(match);
     }
 
     /**
@@ -39,7 +48,10 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public TeamSportMatch getMatch(int id) {
-        return null;
+        return matches.stream()
+                .filter(m -> m.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -49,6 +61,11 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public Collection<TeamSportMatch> getMatchSummary() {
-        return List.of();
+        return matches.stream()
+                .sorted(Comparator
+                        .comparing(TeamSportMatch::getTotalScore)
+                        .thenComparing(TeamSportMatch::getMatchStart)
+                        .reversed())
+                .collect(Collectors.toList());
     }
 }
