@@ -8,6 +8,11 @@ import java.time.LocalDateTime;
 public interface TeamSportMatch {
 
         /**
+         * @return the unique identifier of the match.
+         */
+        public int getId();
+
+        /**
          * @return the home team.
          */
         public Team getHomeTeam();
