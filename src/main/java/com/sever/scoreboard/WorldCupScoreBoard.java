@@ -5,9 +5,10 @@ import java.util.stream.Collectors;
 
 public class WorldCupScoreBoard implements ScoreBoard {
 
-    private Set<FootballMatch> matches = new HashSet<>();
+    private MatchDao matches;
 
-    public WorldCupScoreBoard() {
+    public WorldCupScoreBoard(MatchDao matches) {
+        this.matches = matches;
     }
 
     /**
@@ -21,14 +22,12 @@ public class WorldCupScoreBoard implements ScoreBoard {
     @Override
     public FootballMatch startMatch(int id, Team homeTeam, Team awayTeam) {
         FootballMatch match = new FootballMatch(id, homeTeam, awayTeam);
-        if(matches.stream()
+        if(matches.getMatches().stream()
                 .flatMap(m -> Set.of(m.getAwayTeam(), m.getHomeTeam()).stream())
                 .anyMatch(t -> t.equals(match.getAwayTeam()) || t.equals(match.getHomeTeam()))){
             throw new IllegalArgumentException("One of the teams is already participating in another match.");
         }
-        if(!matches.add(match)) {
-            throw new IllegalArgumentException(String.format("Match with id %d already exists.", id));
-        }
+        matches.addMatch(match);
         return match;
     }
 
@@ -39,7 +38,7 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public void removeMatch(TeamSportMatch match) {
-        matches.remove(match);
+        matches.removeMatch(match);
     }
 
     /**
@@ -50,9 +49,7 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public TeamSportMatch getMatch(int id) {
-        return matches.stream()
-                .filter(m -> m.getId() == id)
-                .findFirst()
+        return matches.getMatchById(id)
                 .orElse(null);
     }
 
@@ -63,7 +60,7 @@ public class WorldCupScoreBoard implements ScoreBoard {
      */
     @Override
     public Collection<TeamSportMatch> getMatchSummary() {
-        return matches.stream()
+        return matches.getMatches().stream()
                 .sorted(Comparator
                         .comparing(TeamSportMatch::getTotalScore)
                         .thenComparing(TeamSportMatch::getMatchStart)

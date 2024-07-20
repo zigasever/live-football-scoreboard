@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class WorldCupScoreboardTest {
 
     private WorldCupScoreBoard createScoreboard() {
-        return new WorldCupScoreBoard();
+        return new WorldCupScoreBoard(new InMemoryMatchStorage());
     }
 
     @Test
