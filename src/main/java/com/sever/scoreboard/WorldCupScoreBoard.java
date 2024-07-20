@@ -26,7 +26,9 @@ public class WorldCupScoreBoard implements ScoreBoard {
                 .anyMatch(t -> t.equals(match.getAwayTeam()) || t.equals(match.getHomeTeam()))){
             throw new IllegalArgumentException("One of the teams is already participating in another match.");
         }
-        matches.add(match);
+        if(!matches.add(match)) {
+            throw new IllegalArgumentException(String.format("Match with id %d already exists.", id));
+        }
         return match;
     }
 
