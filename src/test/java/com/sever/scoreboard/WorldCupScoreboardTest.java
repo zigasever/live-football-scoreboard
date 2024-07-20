@@ -99,5 +99,18 @@ public class WorldCupScoreboardTest {
 
     }
 
+    @Test
+    void matchesShouldHaveUniqueIds() {
+        WorldCupScoreBoard scoreboard = createScoreboard();
+        TeamSportMatch match1 = scoreboard.startMatch(1, new Team("Mexico"), new Team("Canada"));
+
+        IllegalArgumentException e = assertThrows(
+                IllegalArgumentException.class,
+                () -> scoreboard.startMatch(1, new Team("Brazil"), new Team("Argentina")),
+                "Expected startMatch() to throw IllegalArgumentException, but nothing was thrown.");
+
+        assertEquals("Match with id 1 already exists.", e.getMessage());
+    }
+
 
 }
