@@ -110,6 +110,15 @@ class FootballMatchTest {
     }
 
     @Test
+    void testInequality() {
+        Team team1 = new Team("Italy");
+        Team team2 = new Team("Switzerland");
+        FootballMatch match1 = new FootballMatch(1, team1, team2);
+        FootballMatch match2 = new FootballMatch(2, team1, team2);
+        assertEquals(false, match1.equals(match2));
+    }
+
+    @Test
     void equalTeams_shouldProduceEqualHashCode() {
         Team team1 = new Team("Italy");
         Team team2 = new Team("Switzerland");

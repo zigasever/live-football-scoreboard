@@ -108,15 +108,23 @@ class WorldCupScoreboardTest {
         WorldCupScoreBoard scoreboard = createScoreboard();
         scoreboard.startMatch(1, new Team("Mexico"), new Team("Canada"));
 
-        Team t1 = new Team("Mexico");
-        Team t2 = new Team("Brazil");
+        Team teamExisting = new Team("Mexico");
+        Team teamNew = new Team("Brazil");
 
         IllegalArgumentException e = assertThrows(
                 IllegalArgumentException.class,
-                () -> scoreboard.startMatch(2, t1, t2),
+                () -> scoreboard.startMatch(2, teamExisting, teamNew),
                 "Expected startMatch() to throw IllegalArgumentException, but nothing was thrown.");
 
         assertEquals("One of the teams is already participating in another match.", e.getMessage());
+
+        e = assertThrows(
+                IllegalArgumentException.class,
+                () -> scoreboard.startMatch(2, teamNew, teamExisting),
+                "Expected startMatch() to throw IllegalArgumentException, but nothing was thrown.");
+
+        assertEquals("One of the teams is already participating in another match.", e.getMessage());
+
 
     }
 
