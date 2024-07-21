@@ -1,7 +1,6 @@
 package com.sever.scoreboard;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WorldCupScoreBoard implements ScoreBoard {
 
@@ -65,6 +64,6 @@ public class WorldCupScoreBoard implements ScoreBoard {
                         .comparing(TeamSportMatch::getTotalScore)
                         .thenComparing(TeamSportMatch::getMatchStart)
                         .reversed())
-                .collect(Collectors.toList());
+                .toList();
     }
 }
