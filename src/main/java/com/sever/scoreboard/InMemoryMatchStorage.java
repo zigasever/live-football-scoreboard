@@ -3,8 +3,11 @@ package com.sever.scoreboard;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryMatchStorage implements MatchDao {
+
+    private Collection<TeamSportMatch> matches = ConcurrentHashMap.newKeySet();
 
     /**
      * Add a match to the storage.
@@ -13,7 +16,9 @@ public class InMemoryMatchStorage implements MatchDao {
      */
     @Override
     public void addMatch(TeamSportMatch match) {
-
+        if(!matches.add(match)) {
+            throw new IllegalArgumentException(String.format("Match with id %d already exists.", match.getId()));
+        }
     }
 
     /**
@@ -23,7 +28,7 @@ public class InMemoryMatchStorage implements MatchDao {
      */
     @Override
     public void removeMatch(TeamSportMatch match) {
-
+        matches.remove(match);
     }
 
     /**
@@ -33,7 +38,7 @@ public class InMemoryMatchStorage implements MatchDao {
      */
     @Override
     public Collection<TeamSportMatch> getMatches() {
-        return List.of();
+        return matches.stream().toList();
     }
 
     /**
@@ -44,6 +49,8 @@ public class InMemoryMatchStorage implements MatchDao {
      */
     @Override
     public Optional<TeamSportMatch> getMatchById(int id) {
-        return null;
+        return matches.stream()
+                .filter(m -> m.getId() == id)
+                .findFirst();
     }
 }
