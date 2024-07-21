@@ -1,5 +1,6 @@
 package com.sever.scoreboard;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,9 +9,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class InMemoryMatchStorageTest {
+class InMemoryMatchStorageTest {
 
-    private InMemoryMatchStorage inMemoryMatchStorage = new InMemoryMatchStorage();
+    private InMemoryMatchStorage inMemoryMatchStorage;
+
+    @BeforeEach
+    public void init() {
+        inMemoryMatchStorage = new InMemoryMatchStorage();
+    }
 
     @Test
     void testAdd_andRetrieveMatch() {
@@ -51,5 +57,10 @@ public class InMemoryMatchStorageTest {
         FootballMatch match2 = new FootballMatch(1, team1, team2);
         inMemoryMatchStorage.addMatch(match1);
         assertThrows(IllegalArgumentException.class, () -> inMemoryMatchStorage.addMatch(match2));
+    }
+
+    @Test
+    void nonExistantId_sohouldReturnEmpty() {
+        assertEquals(Optional.empty(), inMemoryMatchStorage.getMatchById(1));
     }
 }
